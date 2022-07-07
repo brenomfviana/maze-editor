@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 769294940}
   - component: {fileID: 769294941}
   m_Layer: 0
-  m_Name: LevelParser
+  m_Name: MazeLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 769294939}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8615a53dfe73a546b003115f7c60cef, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dab94ae060a2826694fe7f6b8c81312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:

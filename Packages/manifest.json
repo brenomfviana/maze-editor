@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.2d.tilemap.extras": "file:/mnt/6329c7cc-df5d-4b31-88e5-05ad5c08ffe1/Unity3D/Packages/2d-extras-2.2.2",
     "com.unity.collab-proxy": "1.15.16",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.ide.rider": "3.0.13",

@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class MazeLoaderScene : MonoBehaviour
 {
+    public Camera mainCamera;
     public Sprite[] sprites;
     public Grid grid;
     public Tilemap tilemap;
@@ -12,14 +13,15 @@ public class MazeLoaderScene : MonoBehaviour
 
     void Awake()
     {
-        this.LoadCurrentLevel();
+        LoadCurrentLevel();
     }
 
     private void LoadCurrentLevel()
     {
-        Maze maze = Generator.Generate(Random.Range(0, 1000), 5, 5);
-        Vector3Int crtCell = tilemap.WorldToCell(this.transform.position);
+        Maze maze = Generator.Generate(Random.Range(0, 1000), 6, 6);
+        Vector3Int crtCell = tilemap.WorldToCell(transform.position);
         int ix = crtCell.x;
+        Vector3? center = new Vector3(0, 0, 0);
         for (uint i = 0; i < maze.Height; i++)
         {
             for (uint j = 0; j < maze.Width; j++)
@@ -28,23 +30,15 @@ public class MazeLoaderScene : MonoBehaviour
                 GameObject tile = Instantiate(cell, spawnPoint, Quaternion.identity, grid.transform);
                 TearDownWalls(tile, maze, i, j);
                 SpriteRenderer sr = tile.GetComponent<SpriteRenderer>();
-                if (maze.IsStart(i, j))
-                {
-                    sr.sprite = sprites[1];
-                }
-                else if (maze.IsEnd(i, j))
-                {
-                    sr.sprite = sprites[2];
-                }
-                else
-                {
-                    sr.sprite = sprites[0];
-                }
+                sr.sprite = GetSprite(maze, i, j);
+                Vector3? aux = GetMazeCenter(maze, i, j, spawnPoint);
+                center = aux != null ? FixMazeCenter((Vector3)aux, i, j) : center;
                 crtCell.x += 1;
             }
             crtCell.x = ix;
             crtCell.y -= 1;
         }
+        mainCamera.Move((Vector3)center);
     }
 
     private void TearDownWalls(GameObject cell, Maze maze, uint i, uint j)
@@ -66,5 +60,40 @@ public class MazeLoaderScene : MonoBehaviour
         {
             Destroy(wall.transform.GetChild((int)Direction.West).gameObject);
         }
+    }
+
+    private Sprite GetSprite(Maze maze, uint i, uint j)
+    {
+        if (maze.IsStart(i, j))
+        {
+            return sprites[1];
+        }
+        else if (maze.IsEnd(i, j))
+        {
+            return sprites[2];
+        }
+        return sprites[0];
+    }
+
+    private Vector3? GetMazeCenter(Maze maze, uint i, uint j, Vector3 point)
+    {
+        if (i == maze.Height / 2 && j == maze.Width / 2)
+        {
+            return point;
+        }
+        return null;
+    }
+
+    private Vector3? FixMazeCenter(Vector3 center, uint i, uint j)
+    {
+        if (i % 2 == 1)
+        {
+            center.x -= 0.5f;
+        }
+        if (j % 2 == 1)
+        {
+            center.y += 0.5f;
+        }
+        return center;
     }
 }
